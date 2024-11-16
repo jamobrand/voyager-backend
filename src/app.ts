@@ -3,7 +3,7 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import compressFilter from "./utils/compressFilter.util";
-import { errorHandler } from "./middleware/errorHandler";
+// import { errorHandler } from "./middleware/errorHandler";
 import config from "./config/config";
 import { chaletRouter } from "./routers/chalet";
 import { reservationRouter } from "./routers/reservation";
@@ -39,6 +39,6 @@ app.use("/api/v1/customers", customerRouter);
 app.use("/api/v1/payments", paymentRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 export default app;

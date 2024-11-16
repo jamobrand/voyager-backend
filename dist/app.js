@@ -8,7 +8,6 @@ const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const helmet_1 = __importDefault(require("helmet"));
 const compressFilter_util_1 = __importDefault(require("./utils/compressFilter.util"));
-const errorHandler_1 = require("./middleware/errorHandler");
 const config_1 = __importDefault(require("./config/config"));
 const chalet_1 = require("./routers/chalet");
 const reservation_1 = require("./routers/reservation");
@@ -29,6 +28,5 @@ app.use("/api/v1/reservations", reservation_1.reservationRouter);
 app.use("/api/v1/customers", customer_1.customerRouter);
 app.use("/api/v1/payments", payment_1.paymentRouter);
 app.use("/api/v1/dashboard", dashboard_1.dashboardRouter);
-app.use(errorHandler_1.errorHandler);
 exports.default = app;
 //# sourceMappingURL=app.js.map
