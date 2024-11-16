@@ -1,0 +1,47 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsc --project './tsconfig.build.json' --watch & NODE_ENV=development nodemon --trace-warnings ./dist/index.js",
+    "build": "tsc --project './tsconfig.build.json'",
+    "start": "npm run build && NODE_ENV=production node --trace-warnings ./dist/index.js",
+    "test": "echo \"There are no test cases\" && exit 0",
+    "prepare": "husky",
+    "lint": "eslint src/**/*.ts __test__/**/*.test.ts",
+    "lint:fix": "eslint --fix --ext ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.0",
+    "nodemon": "^3.1.7",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "body-parser": "^1.20.3",
+    "compression": "^1.7.5",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-async-handler": "^1.2.0",
+    "helmet": "^8.0.0",
+    "http-errors": "^2.0.0",
+    "http-status": "^1.7.4",
+    "joi": "^17.13.3",
+    "nanoid": "^3.3.7",
+    "utility-types": "^3.11.0",
+    "winston": "^3.17.0",
+    "xss": "^1.0.15"
+  }
+}

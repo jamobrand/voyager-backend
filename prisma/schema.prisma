@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// enums
+enum RoomType {
+  SINGLE
+  DOUBLE
+  SUITE
+  DELUXE // Added more common room types
+  EXECUTIVE
+}
+
+enum ChaletType {
+  VILLA
+  BUNGALOW
+  COTTAGE
+  LUXURY // Added luxury option
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN // Added check-in status
+  CHECKED_OUT // Added check-out status
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PARTIALLY_PAID // Added for deposit payments
+  PAID
+  REFUNDED
+}
+
+model Customer {
+  id                Int           @id @default(autoincrement())
+  firstName         String
+  lastName          String
+  email             String       
+  phone             String?
+  address           String? // Added address
+  nationality       String? // Added nationality
+  nationalIdNumber  String? // Added ID/passport number
+  dateOfBirth       DateTime? // Added Date of Birth
+  loyaltyPoints     Int? // Added loyalty points
+  profilePicture    String? // Added profile picture
+  preferredRoomType RoomType? // Added preferred room type
+  reservations      Reservation[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+}
+
+model Chalet {
+  id              Int           @id @default(autoincrement())
+  name            String
+  // type            ChaletType
+  chaletType      String
+  capacity        Int
+  chaletImage     String?
+  price           Decimal
+  description     String? // Added description
+  amenities       String[] // Added amenities list
+  available       Boolean       @default(true)
+  maintenanceMode Boolean       @default(false) // Added maintenance mode
+  reservations    Reservation[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([available, chaletType]) // Added index for common queries
+}
+
+model Reservation {
+  id                  Int               @id @default(autoincrement())
+  checkIn             DateTime
+  checkOut            DateTime
+  totalCost           Decimal
+  adults              Int               @default(1) // Added guest count
+  children            Int               @default(0) // Added children count
+  specialRequests     String? // Added special requests
+  status              ReservationStatus @default(PENDING)
+  paymentStatus       PaymentStatus     @default(UNPAID)
+  bookingSource       String? // Added booking source
+  bookingRefNumber    String? // Added booking reference number
+  earlyCheckinRequest Boolean? // Added early check-in request
+  lateCheckoutRequest Boolean? // Added late check-out request
+  discountApplied     Decimal? // Added discount applied
+  refundedAmount      Decimal? // Added refunded amount
+  checkInTime         DateTime? // Added check-in time
+  checkOutTime        DateTime? // Added check-out time
+  cancelledAt         DateTime? // Added cancellation date
+  cancellationReason  String? // Added cancellation reason
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  customer            Customer          @relation(fields: [customerId], references: [id])
+  customerId          Int
+  chalet              Chalet?           @relation(fields: [chaletId], references: [id])
+  chaletId            Int?
+  payments            Payment[]
+
+  @@index([checkIn, checkOut]) // Added index for date queries
+  @@index([status, paymentStatus]) // Added index for status queries
+}
+
+model Payment {
+  id            Int           @id @default(autoincrement())
+  amount        Decimal
+  paymentMethod String // Added payment method
+  transactionId String? // Added transaction ID
+  date          DateTime      @default(now())
+  status        PaymentStatus
+  notes         String? // Added payment notes
+  reservation   Reservation   @relation(fields: [reservationId], references: [id])
+  reservationId Int
+
+  @@index([status, date]) // Added index for payment queries
+}
